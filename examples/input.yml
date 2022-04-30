@@ -1,0 +1,16 @@
+Check internet:
+  command: curl -I https://github.com
+Download json:
+  command: todo
+  async: True
+Download another json:
+  command: todo
+  async: True
+Join json:
+  command: todo
+  deps: ['Download json', 'Download another json']
+Clean files:
+  command: todo
+  can_fail: True
+List files:
+  command: ls -af
