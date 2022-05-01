@@ -1,16 +1,20 @@
-Check internet:
-  command: curl -I https://github.com
-Download json:
-  command: todo
+- name: 'Check internet'
+  command: curl -IL https://raw.githubusercontent.com
+- name: 'Download json'
+  command: curl https://raw.githubusercontent.com/jan25/shelly/main/examples/cats.json -o cats.json
   async: True
-Download another json:
-  command: todo
+- name: 'Download another json'
+  command: curl https://raw.githubusercontent.com/jan25/shelly/main/examples/dogs.json -o dogs.json
   async: True
-Join json:
-  command: todo
-  deps: ['Download json', 'Download another json']
-Clean files:
-  command: todo
+- name: 'Merge json'
+  command: 'jq -s ".[0].pets + .[1].pets | {pets: .}" cats.json dogs.json > examples/merged.json'
+  deps:
+    - 'Download json'
+    - 'Download another json'
+- name: 'Clean files'
+  command: rm dogs.json cats.json
   can_fail: True
-List files:
-  command: ls -af
+- name: 'Show merged json'
+  command: cat merged.json | jq
+- name: 'Delete merged json'
+  command: rm examples/merged.json
